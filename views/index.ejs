@@ -1,0 +1,63 @@
+<!DOCTYPE >
+<html lang="en">
+
+    <!-- Include Head from Layout-->
+    <%- include ('layouts/header'); -%>
+
+    <body>
+
+    <!-- Include Nav From Layouts -->
+    <%- include ('layouts/navbar'); -%>
+
+        <!--Page Header-- Not sure why the assests link is throwing a warning , figure out later--->
+        <header class="masthead" style="background-image: url('/assets/img/home-bg.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>Clean Blog</h1>
+                            <span class="subheading">A Blog Theme by Start Bootstrap</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content-->
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+
+<!------------------------USING ESJ TO POPULATE FROM ARRAY FROM DATABASE with forEach Loop----------------------------->
+                    <!--blogposts is data returned from mongo query in index.js -->
+                    <% blogposts.forEach(function(blogposts){ %>
+                        <div class="post-preview">
+                            <a href="/post/<%=blogposts.id%>">
+                                <h2 class="post-title"><%=blogposts.title%></h2>
+                                <h3 class="post-subtitle"><%=blogposts.body%></h3>
+                            </a>
+                            <p class="post-meta">Posted by<a href="#">
+                                </a><%=blogposts.username%> on
+                                <%=blogposts.datePosted.toDateString()%>
+                            </p>
+                        </div>
+                        <!-- Divider-->
+                        <hr class="my-4" />
+                    <% }); %>
+<!-------------------------------------------End of EJS forEach Loop--------------------------------------------------->
+
+                    <!-- Pager-->
+                    <div class="d-flex justify-content-end mb-4">
+                        <a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Include Footer From Layouts -->
+        <%- include ('layouts/footer'); -%>
+
+        <!-- Include Scripts From Layouts -->
+        <%- include ('layouts/scripts'); -%>
+
+    </body>
+</html>

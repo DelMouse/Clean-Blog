@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Include Head from Layout-->
+<%- include ('layouts/header'); -%>
+
+<body>
+
+<!-- Include Nav From Layouts -->
+<%- include ('layouts/navbar'); -%>
+
+<header class="masthead" style="background-image: url('/assets/img/contact-bg.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="page-heading">
+                    <h1>New Post</h1>
+                    <span class="subheading">Create a New Blog Post.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Main Content-->
+<main class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="my-5">
+                    <form action = "/posts/store" method="POST" id="new-post"
+                          enctype="multipart/form-data"
+                          data-sb-form-api-token="d8cf6b85-5a37-4f17-bc6a-04ef0fa9dac8">
+
+                        <div class="form-floating">
+                            <input class="form-control" id="title" name="title" type="text" placeholder="Title" data-sb-validations="required" />
+                            <label for="title">Title</label>
+                            <div class="invalid-feedback" data-sb-feedback="name:required">A title is required.</div>
+                        </div>
+
+                        <div class="form-floating">
+                            <textarea class="form-control" id="body" name="body" placeholder="Enter your post here..." style="height: 12rem" data-sb-validations="required"></textarea>
+                            <label for="message">Description</label>
+                            <div class="invalid-feedback" data-sb-feedback="message:required">A description is required.</div>
+                        </div>
+                        <br />
+                        <div class="control-group">
+                            <div class="form-group" floating-label-form-group controls>
+                                <label>Image</label>
+                                <input type="file" class="form-control" id="image" name="image">
+                            </div>
+                        </div>
+                        <!-- Submit success message--><!-- This is what your users will see when the form--><!-- has successfully submitted-->
+                        <div class="d-none" id="submitSuccessMessage">
+                            <div class="text-center mb-3">
+                                <div class="fw-bolder">Form submission successful!</div>
+                                <br />
+                            </div>
+                        </div>
+                        <!-- Submit error message--><!----><!-- This is what your users will see when there is--><!-- an error submitting the form-->
+                        <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                        <!-- Submit Button-->
+                        <button class="btn btn-primary text-uppercase" id="submitButton" type="submit">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Include Footer From Layouts -->
+<%- include ('layouts/footer'); -%>
+
+<!-- Include Scripts From Layouts -->
+<%- include ('layouts/scripts'); -%>
+<!-- Core theme JS-->
+
+</body>
+</html>
