@@ -1,14 +1,13 @@
 const express = require('express');//Require express module
-const path = require('path');//Path helper
 const mongoose = require("mongoose");//Database helper
 const ejs = require('ejs');//View Engine
-const BlogPost = require('./models/BlogPostModel');//Require model for CRUD operations
 const fileUpload = require('express-fileupload');
 
 
 const homeController = require('./controllers/home');
 const newPostController = require('./controllers/newPost');
 const getPostController = require('./controllers/getPost');
+const storePostController = require('./controllers/storePost');
 
 
 /**
@@ -45,8 +44,6 @@ app.use(fileUpload());
 app.use('/posts/store',validateMiddleWare);//Validation middleware to be used only on the create post page
 
 
-
-
 /**
  *GET ROUTES
  */
@@ -54,28 +51,18 @@ app.use('/posts/store',validateMiddleWare);//Validation middleware to be used on
 //retrieving DB data and assigning them to var blogposts:blogpost to be returned
 app.get('/',homeController);
 
-
 //GetPost Controller render with post ejs
 app.get('/post/:id',getPostController);
 
 //Create new post rendered with post ejs
 app.get('/posts/new',newPostController);
 
+
 /**
  * POST ROUTES
  */
-//Create and stores new post using Asynchronous call and await the completion before moving on
-//Good idea to console.log() the error message when testing
-app.post('/posts/store', (req,res) => {
-    let image = req.files.image;//user uploaded image from post form
-    //Move image to user dir then create new blog post
-    image.mv(path.resolve(__dirname, 'public/user-images', image.name), async (error) => {
-        //create post ad image url to background image in post ejs
-        await BlogPost.create({...req.body, image: '/user-images/' + image.name}) //err == error message
-        //back to homepage
-        res.redirect('/');
-    });
-})
+app.post('/posts/store',storePostController);
+
 
 /**
  * APP LISTENER ON PORT 3000 (LEAVE ALONE)
@@ -83,6 +70,7 @@ app.post('/posts/store', (req,res) => {
 app.listen(3000, () => {
     console.log('App is listening on port 3000');
 })
+
 
 /**
  * DATABASE CONNECTIONS
