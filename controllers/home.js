@@ -1,8 +1,8 @@
 const BlogPost = require('../models/BlogPostModel');
 
 module.exports = async (req,res) => {
-    const blogposts = await BlogPost.find({});
+    const blogpostsQuery = await BlogPost.find({});
     res.render('index', {
-        blogposts
+        blogposts:blogpostsQuery
     })
 }

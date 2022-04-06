@@ -6,8 +6,9 @@ const BlogPost = require('./models/BlogPostModel');//Require model for CRUD oper
 const fileUpload = require('express-fileupload');
 
 
-
+const homeController = require('./controllers/home');
 const newPostController = require('./controllers/newPost');
+const getPostController = require('./controllers/getPost');
 
 
 /**
@@ -23,10 +24,6 @@ const app = new express();//Create express app *IT JUST WORKS, LEAVE IT AT THAT!
  * Executes in middle of the request and next() signifies done and what to do 'next'
  * great for form validation.
  */
-const customMiddleWare = (req,res,next)=>{
-    console.log('Custom middle ware called');
-    next();
-}
 //Checks to make sure the title, body and files are sent when submitting form when creating a new post
 const validateMiddleWare = (req,res,next)=>{
     if(req.files == null || req.body.title == null || req.body.body == null){
@@ -45,7 +42,6 @@ app.use(bodyParser.json());//parse jason data from the request from form
 //The extended option allows to choose between parsing the URL-encoded data with the querystring
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(fileUpload());
-//app.use(customMiddleWare);
 app.use('/posts/store',validateMiddleWare);//Validation middleware to be used only on the create post page
 
 
@@ -56,38 +52,14 @@ app.use('/posts/store',validateMiddleWare);//Validation middleware to be used on
  */
 //Home page. Makes call to DB and gets all blogpost,hen gives index.ejs access to data.
 //retrieving DB data and assigning them to var blogposts:blogpost to be returned
-app.get('/', async (req, res) => {
-    try{
-        const blogpostQuery = await BlogPost.find({});//data from database
-        res.render('index',{blogposts:blogpostQuery});//Assigns data from DB(blogpostQuery) and send it to index in var blogposts
-    }catch (error){
-        console.log(error)
-    }
-});
+app.get('/',homeController);
 
-app.get('/about', (req, res) => {
-    res.render('about');
-});
 
-app.get('/contact', (req, res) => {
-    res.render('contact');
-})
-
-app.get('/post/:id',async (req, res)=> {
-    try{
-        const blogpostQuery = await BlogPost.findById(req.params.id);
-        res.render('post',{blogpost:blogpostQuery});
-    }catch (error){
-        console.log(error)
-    }
-})
-
+//GetPost Controller render with post ejs
+app.get('/post/:id',getPostController);
 
 //Create new post rendered with post ejs
 app.get('/posts/new',newPostController);
-// app.get('/posts/new', (req, res) => {
-//     res.render('create');
-// });
 
 /**
  * POST ROUTES
