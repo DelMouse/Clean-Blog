@@ -1,13 +1,19 @@
+/**
+ * MODULES PROVIDED BY NODE REQUIRED FOR APP
+ */
 const express = require('express');//Require express module
 const mongoose = require("mongoose");//Database helper
 const ejs = require('ejs');//View Engine
 const fileUpload = require('express-fileupload');
 
-
+/**
+ *REQUIRED CONTROLLER FILES
+ */
 const homeController = require('./controllers/home');
 const newPostController = require('./controllers/newPost');
 const getPostController = require('./controllers/getPost');
 const storePostController = require('./controllers/storePost');
+const validationMiddleware = require('./middleware/validationMiddleware');
 
 
 /**
@@ -18,30 +24,26 @@ let bodyParser = require('body-parser');
 //create Express app
 const app = new express();//Create express app *IT JUST WORKS, LEAVE IT AT THAT!
 
+
+/**
+ * ...USES
+ * MAke USE of some build in functionality provided by npm modules that are required.
+ * Set view engine to ejs, Allow use of public directory for public files, css, imgs ect.
+ * Use Body parser for parsing browser request and responses. Use file upload module from built in node.
+ */
+app.set('view engine', 'ejs');//View engine setup
+app.use(express.static('public'));//Public files in head of ejs file (HTML)
+app.use(bodyParser.json());//parse jason data from the request from form
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(fileUpload());
+
+
 /**
  * MIDDLEWARE
  * Executes in middle of the request and next() signifies done and what to do 'next'
  * great for form validation.
  */
-//Checks to make sure the title, body and files are sent when submitting form when creating a new post
-const validateMiddleWare = (req,res,next)=>{
-    if(req.files == null || req.body.title == null || req.body.body == null){
-        return res.redirect('/posts/new')
-    }
-    next();
-}
-
-/**
- * ...USES
- * MAke USE of some of the build in functionality provided by npm modules that are required
- */
-app.set('view engine', 'ejs');//View engine setup
-app.use(express.static('public'));//Public files in head of ejs file (HTML)
-app.use(bodyParser.json());//parse jason data from the request from form
-//The extended option allows to choose between parsing the URL-encoded data with the querystring
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(fileUpload());
-app.use('/posts/store',validateMiddleWare);//Validation middleware to be used only on the create post page
+app.use('/posts/store',validationMiddleware);//Validation middleware to be used only on the create post page
 
 
 /**
