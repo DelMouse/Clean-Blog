@@ -14,6 +14,7 @@ const newPostController = require('./controllers/newPost');
 const getPostController = require('./controllers/getPost');
 const storePostController = require('./controllers/storePost');
 const newUserController = require('./controllers/newUser')
+const storeUserController = require('./controllers/storeUser');
 const validationMiddleware = require('./middleware/validationMiddleware');
 
 
@@ -68,7 +69,11 @@ app.get('/auth/register',newUserController);
 /**
  * POST ROUTES
  */
+//Store Users Post
 app.post('/posts/store',storePostController);
+
+//Store Users in DB
+app.post('/users/register',storeUserController);
 
 
 /**
