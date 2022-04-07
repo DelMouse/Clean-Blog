@@ -13,6 +13,7 @@ const homeController = require('./controllers/home');
 const newPostController = require('./controllers/newPost');
 const getPostController = require('./controllers/getPost');
 const storePostController = require('./controllers/storePost');
+const newUserController = require('./controllers/newUser')
 const validationMiddleware = require('./middleware/validationMiddleware');
 
 
@@ -59,6 +60,10 @@ app.get('/post/:id',getPostController);
 //Create new post rendered with post ejs
 app.get('/posts/new',newPostController);
 
+//Create new post rendered with post ejs
+app.get('/auth/register',newUserController);
+
+
 
 /**
  * POST ROUTES
@@ -81,6 +86,7 @@ try{
     //Connections to the database, first locally and Web based
     mongoose.connect('mongodb://127.0.0.1:27017/clean-blog-db', {useNewUrlParser:true});
     //Connect to AtlasDatabase database, it will create 'clean-blog-db database if one is not present
+    //mongoose.connect('mongodb+srv://delgroh:datadonkey@cluster0.y7enq.mongodb.net/clean-blog-db?retryWrites=true&w=majority', {useNewUrlParser:true});
 }catch (error){
     console.log(error)
 }
