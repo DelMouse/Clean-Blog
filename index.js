@@ -15,6 +15,8 @@ const getPostController = require('./controllers/getPost');
 const storePostController = require('./controllers/storePost');
 const newUserController = require('./controllers/newUser')
 const storeUserController = require('./controllers/storeUser');
+const loginController = require('./controllers/login');
+const loginUserController = require('./controllers/loginUser');
 const validationMiddleware = require('./middleware/validationMiddleware');
 
 
@@ -51,6 +53,7 @@ app.use('/posts/store',validationMiddleware);//Validation middleware to be used 
 /**
  *GET ROUTES
  */
+app.get('/auth/login',loginController);
 //Home page. Makes call to DB and gets all blogpost,hen gives index.ejs access to data.
 //retrieving DB data and assigning them to var blogposts:blogpost to be returned
 app.get('/',homeController);
@@ -64,8 +67,6 @@ app.get('/posts/new',newPostController);
 //Create new post rendered with post ejs
 app.get('/auth/register',newUserController);
 
-
-
 /**
  * POST ROUTES
  */
@@ -74,6 +75,8 @@ app.post('/posts/store',storePostController);
 
 //Store Users in DB
 app.post('/users/register',storeUserController);
+
+app.post('/users/login',loginUserController);
 
 
 /**
