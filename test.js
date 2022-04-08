@@ -8,8 +8,7 @@ const mongoose = require('mongoose');
 const BlogPost = require('./models/BlogPostModel');
 
 //Connect to AtlasDatabase database, it will create 'clean-blog-db database if one is not present
-mongoose.connect('mongodb+srv://delgroh:datadonkey@cluster0.y7enq.mongodb.net/clean-blog-db?retryWrites=true&w=majority', {useNewUrlParser:true});
-
+//---------------------------------------------------------CONNECTION STRING REMOVED--------------------------------------------------------------------//
 //Creates new blogpost and pass callback function in the event of error called blogpost
 BlogPost.create({
     title: 'The Mythbusters Guide to Saving Money on Energy Bills 3',
