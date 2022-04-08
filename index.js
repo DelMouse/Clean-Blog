@@ -22,10 +22,12 @@ const loginUserController = require('./controllers/loginUser');
 /**
  *REQUIRED MIDDLEWARE FILES
  */
+
 const validationMiddleware = require('./middleware/validationMiddleware');
 //check for user logged in before calling the controller
 const authMiddleware = require('./middleware/authMiddleware');
-
+//redirect to the home page if logged in and click on Login link or new user link
+const redirectIfAuthenticatedMiddleware = require('./middleware/redirectIfAuthenticatedMiddleware');
 
 /**
  * body object that contains parsed data from the form submitted
@@ -68,7 +70,7 @@ app.use('/posts/store',validationMiddleware);
 /**
  *GET ROUTES
  */
-app.get('/auth/login',loginController);
+app.get('/auth/login',redirectIfAuthenticatedMiddleware,loginController);
 //Home page. Makes call to DB and gets all blogpost,hen gives index.ejs access to data.
 //retrieving DB data and assigning them to var blogposts:blogpost to be returned
 app.get('/',homeController);
@@ -80,7 +82,7 @@ app.get('/post/:id',getPostController);
 app.get('/posts/new',authMiddleware,newPostController);
 
 //Create new post rendered with post ejs
-app.get('/auth/register',newUserController);
+app.get('/auth/register',redirectIfAuthenticatedMiddleware,newUserController);
 
 /**
  * POST ROUTES
@@ -89,10 +91,10 @@ app.get('/auth/register',newUserController);
 app.post('/posts/store',authMiddleware,storePostController);
 
 //Store Users in DB
-app.post('/users/register',storeUserController);
+app.post('/users/register',redirectIfAuthenticatedMiddleware,storeUserController);
 
 //Login user route
-app.post('/users/login',loginUserController);
+app.post('/users/login',redirectIfAuthenticatedMiddleware,loginUserController);
 
 
 /**

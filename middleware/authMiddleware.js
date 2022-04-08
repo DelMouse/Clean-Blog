@@ -1,4 +1,5 @@
-const User = require('../models/UserModel');//Import user model
+//Import user model
+const User = require('../models/UserModel');
 
 /**
  *fetch the user from database, if user don't exist, direct back to home page
