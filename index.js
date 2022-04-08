@@ -4,7 +4,8 @@
 const express = require('express');//Require express module
 const mongoose = require("mongoose");//Database helper
 const ejs = require('ejs');//View Engine
-const fileUpload = require('express-fileupload');
+const fileUpload = require('express-fileupload');//File helper
+const expressSession = require('express-session');//Login session helper
 
 /**
  *REQUIRED CONTROLLER FILES
@@ -15,7 +16,15 @@ const getPostController = require('./controllers/getPost');
 const storePostController = require('./controllers/storePost');
 const newUserController = require('./controllers/newUser')
 const storeUserController = require('./controllers/storeUser');
+const loginController = require('./controllers/login');
+const loginUserController = require('./controllers/loginUser');
+
+/**
+ *REQUIRED MIDDLEWARE FILES
+ */
 const validationMiddleware = require('./middleware/validationMiddleware');
+//check for user logged in before calling the controller
+const authMiddleware = require('./middleware/authMiddleware');
 
 
 /**
@@ -39,18 +48,27 @@ app.use(bodyParser.json());//parse jason data from the request from form
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(fileUpload());
 
+/**
+ * Session ID exchanged with the server and users browser to tell which user is logged in.
+ *secret: sign and encrypt the session ID cookie being shared with browser
+ */
+app.use(expressSession({
+    secret: 'mighty mouse'
+}))
+
 
 /**
  * MIDDLEWARE
  * Executes in middle of the request and next() signifies done and what to do 'next'
  * great for form validation.
  */
-app.use('/posts/store',validationMiddleware);//Validation middleware to be used only on the create post page
+app.use('/posts/store',validationMiddleware);
 
 
 /**
  *GET ROUTES
  */
+app.get('/auth/login',loginController);
 //Home page. Makes call to DB and gets all blogpost,hen gives index.ejs access to data.
 //retrieving DB data and assigning them to var blogposts:blogpost to be returned
 app.get('/',homeController);
@@ -59,21 +77,22 @@ app.get('/',homeController);
 app.get('/post/:id',getPostController);
 
 //Create new post rendered with post ejs
-app.get('/posts/new',newPostController);
+app.get('/posts/new',authMiddleware,newPostController);
 
 //Create new post rendered with post ejs
 app.get('/auth/register',newUserController);
-
-
 
 /**
  * POST ROUTES
  */
 //Store Users Post
-app.post('/posts/store',storePostController);
+app.post('/posts/store',authMiddleware,storePostController);
 
 //Store Users in DB
 app.post('/users/register',storeUserController);
+
+//Login user route
+app.post('/users/login',loginUserController);
 
 
 /**

@@ -3,9 +3,20 @@ const Schema = mongoose.Schema;
 //Import bcyrpt
 const  bcrypt = require('bcrypt');
 
+/**
+ *Create user schema with validation configs
+ */
 const UserSchema = new Schema({
-    username:String,
-    password:String
+    username:{
+        type:String,
+        required: true,
+        unique: true
+    },
+
+    password: {
+        type:String,
+        required: true
+    }
 });
 
 /**
