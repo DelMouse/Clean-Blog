@@ -50,13 +50,14 @@ app.use(bodyParser.json());//parse jason data from the request from form
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(fileUpload());
 
+
 /**
  * Session ID exchanged with the server and users browser to tell which user is logged in.
  *secret: sign and encrypt the session ID cookie being shared with browser
  */
 app.use(expressSession({
     secret: 'mighty mouse'
-}))
+}));
 
 
 /**
@@ -96,13 +97,23 @@ app.post('/users/register',redirectIfAuthenticatedMiddleware,storeUserController
 //Login user route
 app.post('/users/login',redirectIfAuthenticatedMiddleware,loginUserController);
 
-
+global.loggedIn = null;
+app.use("*", (req,res,next) => {
+    global.loggedIn = req.session.userId;
+    next();
+})
 /**
  * APP LISTENER ON PORT 3000 (LEAVE ALONE)
  */
 app.listen(3000, () => {
     console.log('App is listening on port 3000');
 })
+
+/**
+ * Now that we are chugging lets set a global var to monitor logged in and to hide links based on status.
+ * First declare global that will be accessible from all ejs files to access nav bar on all pages
+ * @type {null}
+ */
 
 
 /**
