@@ -71,7 +71,7 @@ app.use('/posts/store',validationMiddleware);
 /**
  *GET ROUTES
  */
-app.get('/auth/login',redirectIfAuthenticatedMiddleware,loginController);
+app.get('/auth/login',loginController);
 //Home page. Makes call to DB and gets all blogpost,hen gives index.ejs access to data.
 //retrieving DB data and assigning them to var blogposts:blogpost to be returned
 app.get('/',homeController);
@@ -83,7 +83,7 @@ app.get('/post/:id',getPostController);
 app.get('/posts/new',authMiddleware,newPostController);
 
 //Create new post rendered with post ejs
-app.get('/auth/register',redirectIfAuthenticatedMiddleware,newUserController);
+app.get('/auth/register',newUserController);
 
 /**
  * POST ROUTES
@@ -92,10 +92,10 @@ app.get('/auth/register',redirectIfAuthenticatedMiddleware,newUserController);
 app.post('/posts/store',authMiddleware,storePostController);
 
 //Store Users in DB
-app.post('/users/register',redirectIfAuthenticatedMiddleware,storeUserController);
+app.post('/users/register',storeUserController);
 
 //Login user route
-app.post('/users/login',redirectIfAuthenticatedMiddleware,loginUserController);
+app.post('/users/login',loginUserController);
 
 global.loggedIn = null;
 app.use("*", (req,res,next) => {
