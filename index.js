@@ -93,8 +93,6 @@ app.post('/posts/store',authMiddleware,storePostController);
 try{
     //Connections to the database, first locally and Web based
     mongoose.connect('mongodb://127.0.0.1:27017/clean-blog-db', {useNewUrlParser:true});
-    //Connect to AtlasDatabase database, it will create 'clean-blog-db database if one is not present
-    //mongoose.connect('mongodb+srv://delgroh:datadonkey@cluster0.y7enq.mongodb.net/clean-blog-db?retryWrites=true&w=majority', {useNewUrlParser:true});
 }catch (error){
     console.log(error)
 }
