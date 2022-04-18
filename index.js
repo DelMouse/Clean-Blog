@@ -1,4 +1,4 @@
-/** MODULES PROVIDED BY NODE REQUIRED FOR APP */
+/** MODULES PROVIDED BY NODE REQUIRED FOR APP !!PLACEMENT MATTERS IN THIS!! CHANGING THE ORDER CAN BREAK IT */
 const express = require('express');//Require express module
 const bodyParser = require('body-parser');//Parse request body
 const mongoose = require("mongoose");//Database helper
@@ -68,6 +68,9 @@ app.get('/auth/logout',logOutController);
 app.post('/users/login',redirectIfAuthenticatedMiddleware,loginUserController);//Login user route
 app.post('/users/register',redirectIfAuthenticatedMiddleware,storeUserController);//Store Users in DB
 app.post('/posts/store',authMiddleware,storePostController);
+
+/** 404 Page - Not sure Why but this need to go at end of file */
+app.use((req,res) => res.render('notfound'));
 
 /** DATABASE CONNECTIONS */
 try{
