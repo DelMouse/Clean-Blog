@@ -1,5 +1,4 @@
-//Import user model
-const User = require('../models/UserModel');
+const User = require('../models/UserModel');//Import user model
 
 /**
  *fetch the user from database, if user don't exist, direct back to home page
@@ -7,10 +6,9 @@ const User = require('../models/UserModel');
  */
 module.exports = (req, res, next) => {
     User.findById(req.session.userId, (error, user) => {
-        if (error || !user)
+        if (error || !user){
             return res.redirect('/');
-
+        }
         next()
-
     })
 }

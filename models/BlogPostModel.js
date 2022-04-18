@@ -4,15 +4,15 @@ const mongoose = require('mongoose');//Reguire mongoose for backend database
 const Schema = mongoose.Schema;//Create data schema
 
 const BlogPostSchema = new Schema({
-   title: String,
-   body: String,
-   username:String,
-   datePosted:{
-      type: Date,
-      // `Date.now()` returns the current unix timestamp as a number
-      default: Date.now
-   },
-   image: String
+    title: String,
+    body: String,
+    username: String,
+    datePosted: {
+        type: Date,
+        // `Date.now()` returns the current unix timestamp as a number
+        default: Date.now
+    },
+    image: String
 });
 
 /**
