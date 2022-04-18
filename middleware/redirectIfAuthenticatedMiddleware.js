@@ -3,8 +3,8 @@
  * Redirect to the home page if logged in and click on Login link or new user link
  */
 module.exports = (req,res,next) => {
-  if(req.session.userId) {
-      return res.redirect('/'); //if user is logged in redirect to home page
+  if(req.session.userId){
+      return res.redirect('/') //if user is logged in redirect to home page
   }
-  next();
-};
+  next()
+}
