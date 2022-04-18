@@ -9,23 +9,20 @@ const User = require('../models/UserModel');//Import users model
  * a cookie will be sent back to the server with the authenticated ID (same is user id in DB)
  * to know if user is logged in.
  */
-module.exports = (req,res) => {
-  const { username, password } = req.body;
-  User.findOne({username:username}, (error,user) => {
-      if (user){
-          bcrypt.compare(password, user.password, (error,same) => {
-              if(same){//if passwords match
-                  req.session.userId = user._id;
-                  req.session.test = "test";
-                  res.redirect('/');
-              }
-              else{
-                  res.redirect('/auth/login');
-              }
-          })
-      }
-      else{
-          res.redirect('/auth/login');
-      }
-  })
+module.exports = (req, res) => {
+    const {username, password} = req.body;
+    User.findOne({username: username}, (error, user) => {
+        if (user) {
+            bcrypt.compare(password, user.password, (error, same) => {
+                if (same) {//if passwords match
+                    req.session.userId = user._id;
+                    res.redirect('/');
+                } else {
+                    res.redirect('/auth/login');
+                }
+            })
+        } else {
+            res.redirect('/auth/login');
+        }
+    })
 }
