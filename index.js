@@ -2,6 +2,7 @@
  * MODULES PROVIDED BY NODE REQUIRED FOR APP
  */
 const express = require('express');//Require express module
+const bodyParser = require('body-parser');//Parse request body
 const mongoose = require("mongoose");//Database helper
 const ejs = require('ejs');//View Engine
 const fileUpload = require('express-fileupload');//File helper
@@ -23,7 +24,6 @@ const logOutController = require('./controllers/logOut');
 /**
  *REQUIRED MIDDLEWARE FILES
  */
-
 const validationMiddleware = require('./middleware/validationMiddleware');
 //check for user logged in before calling the controller
 const authMiddleware = require('./middleware/authMiddleware');
@@ -34,13 +34,9 @@ const redirectIfAuthenticatedMiddleware = require('./middleware/redirectIfAuthen
  * body object that contains parsed data from the form submitted
  * access individual properties like req.body(request body).title or
  */
-let bodyParser = require('body-parser');
 //create Express app
 const app = new express();//Create express app *IT JUST WORKS, LEAVE IT AT THAT!
-
-// * APP LISTENER ON PORT 3000 (LEAVE ALONE)
-// */
-app.listen(3000, () => {
+app.listen(3000, () => {// * APP LISTENER ON PORT 3000 (LEAVE ALONE)
     console.log('App is listening on port 3000');
 })
 
@@ -55,15 +51,17 @@ app.use(express.static('public'));//Public files in head of ejs file (HTML)
 app.use(bodyParser.json());//parse jason data from the request from form
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(fileUpload());
+app.use('/posts/store',validationMiddleware);
 
 /**
  * Session ID exchanged with the server and users browser to tell which user is logged in.
  *secret: sign and encrypt the session ID cookie being shared with browser
  */
-app.use(expressSession({
-    secret: 'mighty mouse'
-}));
+app.use(expressSession({secret: 'mighty mouse'}));
 
+/**
+ *For Authentication, hiding and showing tabs based on logged in status
+ */
 global.loggedIn = null;
 app.use("*", (req,res,next) => {
     loggedIn = req.session.userId
@@ -71,28 +69,13 @@ app.use("*", (req,res,next) => {
 })
 
 /**
- * MIDDLEWARE
- * Executes in middle of the request and next() signifies done and what to do 'next'
- * great for form validation.
- */
-app.use('/posts/store',validationMiddleware);
-
-
-/**
  *ROUTES
  */
 //Create new post rendered with post ejs
-app.get('/auth/register',redirectIfAuthenticatedMiddleware,newUserController);
-app.post('/users/register',redirectIfAuthenticatedMiddleware,storeUserController);//Store Users in DB
-app.get('/auth/login',redirectIfAuthenticatedMiddleware,loginController);
-app.post('/users/login',redirectIfAuthenticatedMiddleware,loginUserController);//Login user route
-
 app.get('/',homeController);
-
-//GetPost Controller render with post ejs
+app.get('/auth/register',redirectIfAuthenticatedMiddleware,newUserController);
+app.get('/auth/login',redirectIfAuthenticatedMiddleware,loginController);
 app.get('/post/:id',getPostController);
-
-//Create new post rendered with post ejs
 app.get('/posts/new',authMiddleware,newPostController);
 app.get('/auth/logout',logOutController);
 
@@ -100,15 +83,9 @@ app.get('/auth/logout',logOutController);
  * POST ROUTES
  */
 //Store Users Post
+app.post('/users/login',redirectIfAuthenticatedMiddleware,loginUserController);//Login user route
+app.post('/users/register',redirectIfAuthenticatedMiddleware,storeUserController);//Store Users in DB
 app.post('/posts/store',authMiddleware,storePostController);
-
-
-/**
- * Now that we are chugging lets set a global var to monitor logged in and to hide links based on status.
- * First declare global that will be accessible from all ejs files to access nav bar on all pages
- * @type {null}
- */
-
 
 /**
  * DATABASE CONNECTIONS
